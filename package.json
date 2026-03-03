@@ -1,0 +1,29 @@
+{
+  "name": "http-load-test",
+  "version": "1.0.0",
+  "description": "HTTP load testing CLI — concurrency, RPS control, latency percentiles, ASCII histogram. Zero dependencies.",
+  "type": "module",
+  "bin": {
+    "http-load-test": "./index.js",
+    "hlt": "./index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "developer-tools",
+    "cli",
+    "nodejs",
+    "zero-dependencies",
+    "load-testing",
+    "http",
+    "performance",
+    "benchmarking",
+    "stress-test"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NickCirv/http-load-test.git"
+  }
+}
