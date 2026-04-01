@@ -1,3 +1,5 @@
+![Banner](banner.svg)
+
 # http-load-test
 
 HTTP load testing CLI — concurrency, RPS control, latency percentiles, ASCII histogram.
