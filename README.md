@@ -1,71 +1,67 @@
-<div align="center">
+![http-load-test — Nicholas Ashkar repository collection](assets/nicholas-ashkar/banner.png)
 
 # http-load-test
 
-**Stress-test any HTTP endpoint from the terminal — concurrency, RPS cap, latency percentiles, ASCII histogram.**
+Measure response latency and status distribution for a controlled HTTP workload.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue?labelColor=0B0A09)](LICENSE)
-[![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen?labelColor=0B0A09)](package.json)
-[![Node >= 18](https://img.shields.io/badge/node-%3E%3D18-informational?labelColor=0B0A09)](package.json)
 
-</div>
-
-## Install
-
-```bash
-npx github:NickCirv/http-load-test
-```
-
-Or clone and link globally:
-
-```bash
-git clone https://github.com/NickCirv/http-load-test.git
-cd http-load-test && npm link
-```
-
-## Usage
-
-```bash
-# 100 requests, 10 concurrent (defaults)
-hlt https://example.com
-
-# High concurrency, 500 requests
-hlt https://api.example.com/users -c 20 -n 500
-
-# Duration-based test, capped at 50 RPS
-hlt https://api.example.com/users -d 30 --rps 50
-
-# POST with JSON body and auth header
-hlt https://api.example.com/data \
-  -m POST \
-  -b '{"key":"value"}' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json"
-
-# Warmup requests, JSON output saved to file
-hlt https://example.com --warmup 5 --json -o report.json
-```
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `-c, --concurrency <n>` | 10 | Concurrent connections |
-| `-n, --requests <n>` | 100 | Total requests to send |
-| `-d, --duration <s>` | — | Run for N seconds (overrides `--requests`) |
-| `--rps <n>` | — | Target requests per second (rate limiter) |
-| `-m, --method <method>` | GET | HTTP method: GET POST PUT DELETE PATCH |
-| `-b, --body <string>` | — | Request body |
-| `-H, --header "Key: Value"` | — | Add request header (repeatable) |
-| `--timeout <ms>` | 10000 | Per-request timeout |
-| `--no-keepalive` | — | Disable HTTP keep-alive |
-| `--warmup <n>` | 0 | Warmup requests excluded from stats |
-| `--max-redirects <n>` | 5 | Max redirect hops |
-| `--json` | — | Output final report as JSON |
-| `-o, --output <file>` | — | Save report to file |
+<a id="usage"></a>
 
 ## What it does
 
-Sends a configurable flood of HTTP requests and reports p50/p75/p90/p95/p99 latency percentiles, RPS achieved, success rate, per-status-code counts, and an ASCII histogram of the latency distribution. Supports both fixed-count and duration-based runs, per-request RPS throttling, warmup requests, custom headers/body, and JSON output for scripting. Uses only Node.js built-in modules — no `npm install` needed.
+Sends a fixed count or duration-based workload with configurable concurrency, rate, method, body, timeouts and warmup. Produces latency statistics and optional JSON/file output. See the pinned [implementation](https://github.com/NickCirv/http-load-test/blob/b487e9c6ca7af9dcfe1e77a741112380c22eca7d/index.js).
 
----
 
-<sub>Zero dependencies · Node >=18 · MIT · by <a href="https://github.com/NickCirv">NickCirv</a></sub>
+<a id="install"></a>
+
+## Quickstart
+
+Node requirement from the inspected manifest: **`>=20`**. Start a local test endpoint before the example. Keep the first run small and use read-only requests.
+
+The following example is **source-inspected, not executed**. It uses a pinned checkout; npm package publication is not assumed. Replace project paths or provide the stated input fixtures before running it.
+
+```bash
+git clone https://github.com/NickCirv/http-load-test.git
+cd http-load-test
+git checkout b487e9c6ca7af9dcfe1e77a741112380c22eca7d
+npm install --ignore-scripts
+node index.js http://127.0.0.1:3000 --requests 10 --concurrency 1 --json
+```
+
+Dependencies are installed with lifecycle scripts disabled in this recipe. Read the package scripts before enabling any lifecycle step required by your environment.
+
+## Usage and reference
+
+`http-load-test` | `hlt` are the executable names declared by the package. [Command reference](docs/REFERENCE.md) covers source-backed options and entry points.
+
+| Control | Behavior in the inspected implementation |
+| --- | --- |
+| `--requests N` | Set request count |
+| `--concurrency N` | Set concurrent requests |
+| `--duration SECONDS` | Use a timed run |
+| `--rps N` | Set target request rate |
+| `--json` | Emit a final JSON report |
+
+## Limits and operational notes
+
+The load generator can affect availability and can repeat mutating requests. Use it only against an authorized test target. Client CPU, connection behavior and network conditions constrain the results; this is not a distributed benchmark.
+
+## Development
+
+No runtime checks were executed for this documentation review. The committed smoke test checks entrypoint JavaScript syntax; it does not exercise the command behavior.
+
+| Script | Declared command |
+| --- | --- |
+| `test` | `node --test` |
+
+Work from the pinned source, keep changes focused, and reproduce the affected behavior with a small fixture before proposing a change. Existing contribution and security policies remain authoritative where present.
+
+## Research and status
+
+[Research record](docs/RESEARCH.md) identifies the inspected revision, source evidence, documentation disposition and verification gaps. Static inspection supports the descriptions here; runtime behavior, dependency installation and current hosted services remain unverified.
+
+## License and author
+
+[License](https://github.com/NickCirv/http-load-test/blob/b487e9c6ca7af9dcfe1e77a741112380c22eca7d/LICENSE)
+
+[Nicholas Ashkar](https://nicholashkar.com) · Applied AI, systems and consulting.
